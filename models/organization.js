@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate(instance, options) {
-        instance.isPaid = false
+        instance.isPaid = instance.isPaid ? instance.isPaid : false
       }
     },
     sequelize,

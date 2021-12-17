@@ -2,7 +2,9 @@
 const {
   Model
 } = require('sequelize');
+
 const { hashPassword } = require('../helper/bcryipt')
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**

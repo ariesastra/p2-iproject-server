@@ -62,7 +62,6 @@ List of available endpoints:
 
 - `POST/Register` 
 - `POST/login`
-- `POST/profiles`
 - `GET/profile`
 - `GET/posts`
 - `POST/post`
@@ -74,9 +73,8 @@ List of available endpoints:
 - `DELETE/organization/delete/:id`
 - `POST/payment/post`
 - `GET/payment/:UserId`
-
-- `POST/payment/xendit`
-- `PUT/profile/:id`
+- `POST/payment/stripe-checkout-session`
+- `POST/payment/success`
 
 ## 1. POST /register
 

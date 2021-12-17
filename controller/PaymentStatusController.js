@@ -36,7 +36,7 @@ class PaymentStatusController {
   static async getPaymentByUserId (req, res, next) {
     const { UserId } = req.params
     try {
-      const data = await PaymentStatus.findOne({
+      const data = await PaymentStatus.findAll({
         include: [{
           model: User,
           attributes: {
@@ -44,6 +44,12 @@ class PaymentStatusController {
           }
         }, {
           model: Organization,
+          include: [{
+            model: User,
+            attributes: {
+              exclude: ["updatedAt", "createdAt", "password"]
+            }
+          }],
           attributes: {
             exclude: ["updatedAt", "createdAt"]
           }
@@ -56,7 +62,7 @@ class PaymentStatusController {
         }
       })
       if ( !data ) throw { name: "NOT_FOUND" }
-
+      
       res.status(200).json(data)
     } catch (error) {
       next(error)
@@ -65,20 +71,15 @@ class PaymentStatusController {
 
   static async paymentProcess (req, res, next) {
     try {
+      console.log(req.body)
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode: 'payment',
         line_items: req.body.stripe,
-        success_url: `${process.env.CLIENT_URL}/payment?success=true`,
-        cancel_url: `${process.env.CLIENT_URL}/payment?success=fail`
+        success_url: `${process.env.CLIENT_URL}/payment?success=true&paymentId=${req.body.idPayment}`,
+        cancel_url: `${process.env.CLIENT_URL}/payment?success=false`
       })
       
-      /**
-       * Arahin ke vue components yg isinya cuman script untuk update 
-       * success payment, terus arahin ke halaman home dengan success message
-       */
-      console.log(req.body.idPayment);
-
       res.json({
         url: session.url
       })
@@ -88,13 +89,19 @@ class PaymentStatusController {
   }
 
   static async successPayment (req, res, next) {
+    const { id } = req.body
+
     try {
-      const data = await PaymentStatus.update({
+      await PaymentStatus.update({
         status: 'paid'
       }, {
         where: {
           id
         }
+      })
+      
+      res.status(200).json({
+        message: 'Thank you for paying !'
       })
     } catch (error) {
       next(error)
