@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
     kecamatan: DataTypes.STRING,
     kotaKab: DataTypes.STRING,
     provinsi: DataTypes.STRING,
-    lat: DataTypes.INTEGER,
-    long: DataTypes.INTEGER
+    lat: DataTypes.REAL,
+    long: DataTypes.REAL
   }, {
     hooks: {
       beforeCreate (instance, options) {       
