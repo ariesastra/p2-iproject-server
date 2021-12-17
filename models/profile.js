@@ -46,16 +46,33 @@ module.exports = (sequelize, DataTypes) => {
     long: DataTypes.REAL
   }, {
     hooks: {
-      beforeCreate (instance, options) {       
-        opencageMap(instance.alamat, (err, data) => {
+      // beforeCreate (instance, options) {       
+      //   opencageMap(instance.alamat, (err, data) => {
+      //     const latitude = data.geometry.lat
+      //     const longitude = data.geometry.lng  
+          
+      //     console.log(data);
+      //     // console.log(latitude, longitude);
+
+      //     instance.lat = -6.1
+      //     instance.long = longitude
+
+      //     console.log(instance.lat, instance.long, '<<<<< dari instance');
+      //   })
+      // },
+      afterCreate (instance, options) {
+        opencageMap(instance.alamat).then(data => {
           const latitude = data.geometry.lat
           const longitude = data.geometry.lng  
-          
-          console.log(data);
-          console.log(latitude, longitude);
 
-          instance.lat = latitude
-          instance.long = longitude
+          return Profile.update({
+            lat: latitude, 
+            long: longitude
+          }, {
+            where: {
+              id: instance.id
+            }
+          }) 
         })
       }
     },

@@ -1,16 +1,11 @@
 const opencage = require('opencage-api-client');
 
-const opencageMap = (alamat, callback) => {
-  opencage.geocode({ q: alamat })
+const opencageMap = (alamat) => {
+  return opencage.geocode({ q: alamat })
   .then((data) => {
-    // console.log(JSON.stringify(data));
     if (data.results.length > 0) {
       const place = data.results[0];
-      
-      callback(null, place)
-      // save to instance db
-      // instance.lat = `${place.geometry.lat}`
-      // instance.long = `${place.geometry.lng}`
+      return Promise.resolve(place)
     } else {
       console.log('Status', data.status.message);
       console.log('total_results', data.total_results);
@@ -22,7 +17,6 @@ const opencageMap = (alamat, callback) => {
     
     if (error.status.code === 402) {
       console.log('hit free trial daily limit');
-      // console.log('become a customer: https://opencagedata.com/pricing');
     }
   });
 }
