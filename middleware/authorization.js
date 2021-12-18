@@ -1,5 +1,5 @@
 const { verifyToken } = require('../helper/jwt')
-const { Post, Organization, PaymentStatus } = require('../models')
+const { Post, Organization, PaymentStatus, Profile } = require('../models')
 
 const postAuthorization = async (req, res, next) => {
   const { id: UserId } = req.auth
@@ -20,6 +20,23 @@ const postAuthorization = async (req, res, next) => {
       }
     })
     if ( !cekOwner ) throw { name: "FORBIDDEN" }
+
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
+
+const profileCheck = async (req, res, next) => {
+  const { id: UserId } = req.auth
+
+  try {
+    const cekProfile = await Profile.findOne({
+      where: {
+        UserId
+      }
+    })
+    if ( cekProfile ) throw { name: "FORBIDDEN" }
 
     next()
   } catch (error) {
@@ -92,5 +109,6 @@ module.exports = {
   postAuthorization, 
   organizationAuthor, 
   paymentAuthor,
-  getPaymentDetails
+  getPaymentDetails,
+  profileCheck
 }

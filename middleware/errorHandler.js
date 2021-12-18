@@ -48,6 +48,9 @@ const errorHandler = async (err, req, res, next) => {
   } else if (err.name === "ORGANIZATION_FAIL") {
     status = 404
     message = 'Organization Not Found !'
+  } else if ( err.name === "HAVE_A_PAYMENT" ) {
+    status = 401
+    message = "This User Already have a Payment !"
   }
 
   res.status(status).json({

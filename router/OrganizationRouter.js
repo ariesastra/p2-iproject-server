@@ -1,9 +1,9 @@
 const organizaiton = require('express').Router()
 const OrganizationController = require('../controller/OrganizationController')
-const { organizationAuthor } = require('../middleware/authorization')
+const { organizationAuthor, profileCheck } = require('../middleware/authorization')
 
-organizaiton.post('/', OrganizationController.postOrganization)
 organizaiton.get('/', OrganizationController.getOrganization)
+organizaiton.post('/', profileCheck, OrganizationController.postOrganization)
 organizaiton.put('/update/:id', 
   organizationAuthor,
   OrganizationController.putOrganization

@@ -8,6 +8,9 @@ class PaymentStatusController {
       const findUser = await User.findOne({
         where: {
           email
+        },
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt"]
         }
       })
       if ( !findUser) throw { name: "USER_NOT_FOUND" }
@@ -19,14 +22,22 @@ class PaymentStatusController {
       })
       if ( !findOrgs ) throw { name: "ORGANIZATION_FAIL" }
 
-      const data = await PaymentStatus.create({
+      const findPayment = await PaymentStatus.findOne({
+        where: {
+          UserId: findUser.id,
+          OrganizationId: findOrgs.id
+        }
+      })
+      if ( findPayment ) throw { name: "HAVE_A_PAYMENT" }
+
+      // input data to DB
+      await PaymentStatus.create({
         UserId: findUser.id,
         OrganizationId
       })
 
       res.status(201).json({
         message: `${email} already assign to ${findOrgs.name}`,
-        data
       })
     } catch (error) {
       next(error)

@@ -6,19 +6,15 @@ const { fileUpload } = require('../middleware/fileUpload')
 // CONTROLLER
 const UserController = require('../controller/UserController')
 
-user.post('/register', 
-  instanceMulter.single('profileImg'),
-  fileUpload,
-  UserController.register
-)
+user.post('/register', UserController.register)
 user.post('/login', UserController.login)
 user.post('/google-oauth', UserController.loginGoogle)
 
-// user.post('/profile', 
-//   instanceMulter.single('profileImg'),
-//   fileUpload,
-//   UserController.postProfile
-// )
+user.post('/profile', 
+  instanceMulter.single('profileImg'),
+  fileUpload,
+  UserController.postProfile
+)
 
 user.get('/profile',
   authentication,

@@ -8,15 +8,6 @@ class UserController {
     const { 
       email, 
       password ,
-      namaLengkap,
-      alamat,
-      rtRw,
-      kelurahan,
-      kecamatan,
-      kotaKab,
-      provinsi,
-      lat,
-      long
     } = req.body
     
     try {
@@ -24,42 +15,19 @@ class UserController {
         email, 
         password
       })
-
-      const profile = await Profile.create({
-        UserId: user.id,
-        namaLengkap,
-        alamat,
-        rtRw,
-        kelurahan,
-        kecamatan,
-        kotaKab,
-        provinsi,
-        lat,
-        long,
-        imageUrl: req.dataUpload.url
-      })
     
       res.status(201).json({
         message: "Your profile is created",
         data: {
-          id: profile.id,
-          UserId: profile.UserId,
-          namaLengkap: profile.namaLengkap,
-          imageUrl: profile.imageUrl,
-          alamat: profile.alamat,
-          rtRw: profile.rtRw,
-          kelurahan: profile.kelurahan,
-          kecamatan: profile.kecamatan,
-          kotaKab: profile.kotaKab,
-          provinsi: profile.provinsi,
-          lat: profile.lat,
-          long: profile.long,
+          id: user.id,
+          UserId: user.UserId,
         }
       })
     } catch (error) {
       next(error)
     }
   }
+  
   static async login (req, res, next) {
     const { email, password } = req.body
 
@@ -90,14 +58,52 @@ class UserController {
       next(error)
     }
   }
+
   static async postProfile (req, res, next) {
+    const {
+      namaLengkap,
+      alamat, 
+      rtRw,
+      kelurahan,
+      kecamatan,
+      kotaKab,
+      provinsi
+    } = req.body
+    const { id: UserId } = req.auth
+
     try {
-     
+     const data = await Profile.create({
+      UserId,
+      namaLengkap,
+      alamat, 
+      rtRw,
+      kelurahan,
+      kecamatan,
+      kotaKab,
+      provinsi
+     })
+
+     const result = {
+       "nama-lengkap": data.namaLengkap,
+       alamat: data.alamat,
+       "rt/rw": data.rtRw,
+       kelurahan: data.kelurahan,
+       kecamatan: data.kecamatan,
+       "kota-kab": data.kotaKab,
+       provinsi: data.provinsi,
+       latitude: data.lat,
+       longitude: data.long
+     }
       
+     res.status(200).json({
+       message: "Your Profile already updated !",
+       data: result
+     })
     } catch (error) {
       next(error)  
     }
   }
+
   static async getProfile (req, res, next) {
     try {
       const data = await Profile.findOne({
@@ -120,6 +126,7 @@ class UserController {
       next(error)
     }
   }
+
   static async loginGoogle(req, res, next) {
     const { idToken, email } = req.body;
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
