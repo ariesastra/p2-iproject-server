@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Post)
       User.hasMany(models.Organization)
       User.hasMany(models.PaymentStatus)
+      User.hasMany(models.Comment)
     }
   };
   User.init({
