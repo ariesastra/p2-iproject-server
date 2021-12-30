@@ -36,7 +36,7 @@ const profileCheck = async (req, res, next) => {
         UserId
       }
     })
-    if ( cekProfile ) throw { name: "FORBIDDEN" }
+    if ( !cekProfile ) throw { name: "FORBIDDEN" }
 
     next()
   } catch (error) {

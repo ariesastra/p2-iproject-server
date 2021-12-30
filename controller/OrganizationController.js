@@ -86,7 +86,7 @@ class OrganizationController {
           UserId
         }
       })  
-      console.log(cekOrgs);
+
       res.status(200).json({
         message: `Organization has deleted !`
       })

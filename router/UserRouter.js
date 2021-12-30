@@ -11,6 +11,7 @@ user.post('/login', UserController.login)
 user.post('/google-oauth', UserController.loginGoogle)
 
 user.post('/profile', 
+  authentication,
   instanceMulter.single('profileImg'),
   fileUpload,
   UserController.postProfile

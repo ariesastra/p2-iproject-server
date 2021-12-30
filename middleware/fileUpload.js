@@ -1,7 +1,5 @@
-const { response } = require('express');
-var formData = require('form-data')
 const { imageKit } = require('../apis/imageKit');
-
+var formData = require('form-data')
 
 const fileUpload = async (req, res, next) => {
   try {

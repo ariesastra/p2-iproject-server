@@ -37,7 +37,7 @@ class PaymentStatusController {
       })
 
       res.status(201).json({
-        message: `${email} already assign to ${findOrgs.name}`,
+        message: `${email} has assign to ${findOrgs.name}`,
       })
     } catch (error) {
       next(error)

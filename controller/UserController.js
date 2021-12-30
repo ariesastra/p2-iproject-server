@@ -75,6 +75,7 @@ class UserController {
      const data = await Profile.create({
       UserId,
       namaLengkap,
+      imageUrl: req.dataUpload.url,
       alamat, 
       rtRw,
       kelurahan,
@@ -85,6 +86,7 @@ class UserController {
 
      const result = {
        "nama-lengkap": data.namaLengkap,
+       imageUrl: data.imageUrl,
        alamat: data.alamat,
        "rt/rw": data.rtRw,
        kelurahan: data.kelurahan,
