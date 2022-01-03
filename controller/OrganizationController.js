@@ -94,6 +94,29 @@ class OrganizationController {
       next(error)
     }
   }
+  static async getMember (req, res, next) {
+    const { id } = req.params
+    const { id: UserId } = req.auth
+
+    try {
+      const data = await Organization.findAll({
+        where:{
+          id,
+          UserId
+        },
+        include: [{
+          model: PaymentStatus,
+          attributes: {
+            exclude: ['updatedAt', 'createdAt']
+          }
+        }]
+      })
+
+      console.log(data);
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = OrganizationController
